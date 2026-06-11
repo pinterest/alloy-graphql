@@ -1,0 +1,51 @@
+{
+  "name": "@pinterest/alloy-graphql",
+  "version": "0.1.0",
+  "description": "GraphQL bindings for Alloy",
+  "readme": "README.md",
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./stc": {
+      "development": "./src/components/stc/index.ts",
+      "import": "./dist/src/components/stc/index.js"
+    }
+  },
+  "imports": {
+    "#components/*": {
+      "development": "./src/components/*",
+      "default": "./dist/src/components/*"
+    }
+  },
+  "scripts": {
+    "generate-docs": "api-extractor run",
+    "build": "alloy build && pnpm run generate-docs",
+    "clean": "rimraf dist/ .temp/",
+    "test:watch": "vitest -w",
+    "watch": "alloy build --watch",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "steverice@pinterest.com",
+  "license": "MIT",
+  "dependencies": {
+    "@alloy-js/core": "^0.23.1",
+    "graphql": "^17.0.0-alpha.9",
+    "pathe": "^2.0.3",
+    "pluralize": "^8.0.0"
+  },
+  "devDependencies": {
+    "@alloy-js/cli": "^0.23.0",
+    "@alloy-js/rollup-plugin": "^0.1.1",
+    "@microsoft/api-extractor": "~7.52.8",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/pluralize": "^0.0.33",
+    "concurrently": "^9.2.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "type": "module"
+}

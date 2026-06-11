@@ -1,0 +1,27 @@
+{
+  "name": "alloy-graphql",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Standalone GraphQL adapter layer for Alloy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinterest/alloy-graphql.git"
+  },
+  "type": "module",
+  "packageManager": "pnpm@10.13.1",
+  "scripts": {
+    "build": "pnpm -r --workspace-concurrency=Infinity build",
+    "clean": "pnpm -r run clean",
+    "changeset": "changeset",
+    "format": "pnpm -r --if-present format",
+    "lint": "pnpm -r --if-present lint",
+    "smoke:test": "pnpm -C examples/smoke-consumer test",
+    "test": "pnpm -r test",
+    "test:watch": "pnpm -r test:watch",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0"
+  }
+}
