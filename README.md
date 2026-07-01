@@ -33,13 +33,23 @@ pnpm build
 
 ## Release workflow
 
-This repo uses Changesets for versioning and publishing.
+1. Create a changeset for your changes:
+   ```bash
+   pnpm changeset
+   ```
 
-```bash
-pnpm changeset          # create a release note/version bump entry
-pnpm version-packages   # apply versions and changelog updates
-pnpm release            # publish packages
-```
+2. When ready to release, apply version bumps:
+   ```bash
+   pnpm version-packages
+   ```
+
+3. Commit the version changes and create a GitHub release with a version tag (e.g., `v0.1.0`)
+
+4. The [publish workflow](.github/workflows/publish.yml) will automatically build and publish to:
+   - npm registry (`@pinterest/alloy-graphql`)
+   - GitHub Packages
+
+You can also trigger the publish workflow manually from the Actions tab.
 
 ## Community docs
 
