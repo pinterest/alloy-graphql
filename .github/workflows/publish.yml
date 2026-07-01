@@ -27,7 +27,8 @@ jobs:
         run: pnpm build
 
       - name: Publish to npm
-        run: pnpm -C packages/graphql publish --access public --no-git-checks
+        working-directory: packages/graphql
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -52,6 +53,7 @@ jobs:
         run: pnpm build
 
       - name: Publish to GitHub Packages
-        run: pnpm -C packages/graphql publish --access public --no-git-checks
+        working-directory: packages/graphql
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
