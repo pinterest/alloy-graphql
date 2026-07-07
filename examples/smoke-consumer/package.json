@@ -10,8 +10,8 @@
     "graphql": "^17.0.0-alpha.9"
   },
   "devDependencies": {
-    "@alloy-js/core": "^0.23.1",
-    "@alloy-js/rollup-plugin": "^0.1.1",
+    "@alloy-js/core": "^0.24.1",
+    "@alloy-js/rollup-plugin": "^0.1.2",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
