@@ -331,6 +331,28 @@ describe("directive applications", () => {
     );
   });
 
+  it("rejects an Argument that supplies both value and valueNode", () => {
+    const rawValueNode: ConstValueNode = { kind: Kind.BOOLEAN, value: true };
+
+    expect(() =>
+      renderSchema(
+        <>
+          <ScalarType name="JSON" serialize={(value: unknown) => value} />
+          <DirectiveDefinition name="config" locations={["FIELD_DEFINITION"]}>
+            <InputValue name="data" type="JSON" />
+          </DirectiveDefinition>
+          <Query>
+            <Field name="ping" type={String}>
+              <Directive name="config">
+                <Argument name="data" value={true} valueNode={rawValueNode} />
+              </Directive>
+            </Field>
+          </Query>
+        </>,
+      ),
+    ).toThrow(/received both "value" and "valueNode"/);
+  });
+
   it("rejects directive conflicts with built-in props", () => {
     expect(() =>
       renderSchema(

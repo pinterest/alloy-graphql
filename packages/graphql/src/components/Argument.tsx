@@ -31,6 +31,11 @@ export function Argument(props: ArgumentProps): Children {
   if (target.argNames.has(props.name)) {
     throw new Error(`Directive argument "${props.name}" is already defined.`);
   }
+  if (props.value !== undefined && props.valueNode !== undefined) {
+    throw new Error(
+      `Argument "${props.name}" received both "value" and "valueNode"; provide only one.`,
+    );
+  }
   target.argNames.add(props.name);
   target.args.push({
     name: props.name,
