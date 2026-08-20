@@ -74,7 +74,10 @@ export function buildAppliedDirectiveNodes(
       }
 
       providedArgs.add(arg.name);
-      const valueNode = astFromValue(arg.value, argDef.type);
+      // Honor a pre-built ConstValueNode when supplied, so directive args
+      // carrying arbitrary structures in a custom scalar can bypass
+      // astFromValue's coercion limits.
+      const valueNode = arg.valueNode ?? astFromValue(arg.value, argDef.type);
       if (!valueNode) {
         throw new Error(
           `Directive "@${directiveName}" argument "${arg.name}" on ${ownerLabel} could not be coerced to ${String(
