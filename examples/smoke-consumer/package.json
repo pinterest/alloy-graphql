@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "pretest": "pnpm --filter @pinterest/alloy-graphql build",
     "test": "vitest run"
   },
   "dependencies": {
