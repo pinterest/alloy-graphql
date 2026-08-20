@@ -8,12 +8,17 @@ on:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    permissions:
+      # Required for npm trusted publishing (OIDC) and provenance attestation.
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
+      # Node 24 bundles npm 11.x; trusted publishing needs npm >= 11.5.1.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .node-version
           registry-url: https://registry.npmjs.org/
 
       - uses: pnpm/action-setup@v4
@@ -26,20 +31,22 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # Credentials come from OIDC; provenance is attached automatically.
       - name: Publish to npm
         working-directory: packages/graphql
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   publish-gpr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .node-version
           registry-url: https://npm.pkg.github.com/
 
       - uses: pnpm/action-setup@v4
