@@ -1,5 +1,6 @@
 import type { Children, Namekey } from "@alloy-js/core";
 import type {
+  ConstValueNode,
   DirectiveLocation,
   GraphQLNamedType,
   GraphQLScalarType,
@@ -276,6 +277,12 @@ export interface AppliedDirective {
 export interface AppliedDirectiveArgument {
   name: string;
   value: unknown;
+  /**
+   * Pre-built graphql-js value AST used verbatim during schema build,
+   * bypassing `astFromValue`. For directive args whose value is an arbitrary
+   * structure inside a custom scalar, which `astFromValue` cannot coerce.
+   */
+  valueNode?: ConstValueNode;
 }
 
 /**

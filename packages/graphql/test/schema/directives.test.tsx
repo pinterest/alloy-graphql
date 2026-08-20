@@ -20,6 +20,7 @@ import {
   GraphQLInputObjectType,
   GraphQLObjectType,
   Kind,
+  type ConstValueNode,
 } from "graphql";
 import { describe, expect, it } from "vitest";
 
@@ -274,6 +275,60 @@ describe("directive applications", () => {
         </>,
       ),
     ).toThrow(/cannot represent non-integer value/);
+  });
+
+  it("cannot coerce a custom-scalar directive argument without a valueNode", () => {
+    expect(() =>
+      renderSchema(
+        <>
+          <ScalarType name="JSON" serialize={(value: unknown) => value} />
+          <DirectiveDefinition name="config" locations={["FIELD_DEFINITION"]}>
+            <InputValue name="data" type="JSON" />
+          </DirectiveDefinition>
+          <Query>
+            <Field name="ping" type={String}>
+              <Directive name="config">
+                <Argument name="data" value={{ nested: { structure: true } }} />
+              </Directive>
+            </Field>
+          </Query>
+        </>,
+      ),
+    ).toThrow(/Cannot convert value to AST/);
+  });
+
+  it("honors a pre-built valueNode to bypass astFromValue for custom scalars", () => {
+    const rawValueNode: ConstValueNode = {
+      kind: Kind.OBJECT,
+      fields: [
+        {
+          kind: Kind.OBJECT_FIELD,
+          name: { kind: Kind.NAME, value: "nested" },
+          value: { kind: Kind.BOOLEAN, value: true },
+        },
+      ],
+    };
+
+    const schema = renderSchema(
+      <>
+        <ScalarType name="JSON" serialize={(value: unknown) => value} />
+        <DirectiveDefinition name="config" locations={["FIELD_DEFINITION"]}>
+          <InputValue name="data" type="JSON" />
+        </DirectiveDefinition>
+        <Query>
+          <Field name="ping" type={String}>
+            <Directive name="config">
+              <Argument name="data" valueNode={rawValueNode} />
+            </Directive>
+          </Field>
+        </Query>
+      </>,
+    );
+
+    const field = schema.getQueryType()?.getFields().ping;
+    expect(field?.astNode?.directives?.[0].arguments?.[0].value).toEqual(
+      rawValueNode,
+    );
   });
 
   it("rejects directive conflicts with built-in props", () => {
